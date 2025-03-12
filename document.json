@@ -1,0 +1,320 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "IoT设备控制API",
+    "description": "控制和获取物联网设备数据的API接口",
+    "version": "v1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://ip:5000",
+      "description": "IOT"
+    }
+  ],
+  "paths": {
+    "/api/sensor/temperature": {
+      "get": {
+        "summary": "获取温度数据",
+        "description": "返回当前温度传感器的数据",
+        "operationId": "getTemperature",
+        "responses": {
+          "200": {
+            "description": "成功获取温度数据",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TemperatureResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/sensor/humidity": {
+      "get": {
+        "summary": "获取湿度数据",
+        "description": "返回当前湿度传感器的数据",
+        "operationId": "getHumidity",
+        "responses": {
+          "200": {
+            "description": "成功获取湿度数据",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HumidityResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/sensor/temp-humidity": {
+      "get": {
+        "summary": "获取温湿度数据",
+        "description": "同时返回温度和湿度传感器的数据",
+        "operationId": "getTempHumidity",
+        "responses": {
+          "200": {
+            "description": "成功获取温湿度数据",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TempHumidityResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/sensor/all": {
+      "get": {
+        "summary": "获取所有传感器数据",
+        "description": "返回所有传感器的数据，包括温度、湿度、光照和红外",
+        "operationId": "getAllSensorData",
+        "responses": {
+          "200": {
+            "description": "成功获取所有传感器数据",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AllSensorDataResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/control/led/{status}": {
+      "get": {
+        "summary": "控制LED状态",
+        "description": "控制LED的开关状态",
+        "operationId": "controlLED",
+        "parameters": [
+          {
+            "name": "status",
+            "in": "path",
+            "description": "LED的目标状态，可以是'on'或'off'",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": ["on", "off"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功控制LED",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LEDControlResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/control/lcdtext/{content}": {
+      "get": {
+        "summary": "控制LCD显示内容",
+        "description": "设置LCD显示的文本内容",
+        "operationId": "controlLCD",
+        "parameters": [
+          {
+            "name": "content",
+            "in": "path",
+            "description": "要在LCD上显示的内容",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功设置LCD内容",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LCDControlResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/emo/{emotype}": {
+      "get": {
+        "summary": "显示表情符号",
+        "description": "在LCD上显示特定类型的表情符号",
+        "operationId": "displayEmoticon",
+        "parameters": [
+          {
+            "name": "emotype",
+            "in": "path",
+            "description": "要显示的表情包括happy, wink, surprised, angry, sleepy, crying, playful, cute, thinking, love",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": ["happy", "wink", "surprised", "angry", "sleepy", "crying", "playful", "cute", "thinking", "love"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功显示表情符号",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmoticonResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "TemperatureResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "temperature": {
+                "type": "number"
+              }
+            }
+          }
+        }
+      },
+      "HumidityResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "humidity": {
+                "type": "number"
+              }
+            }
+          }
+        }
+      },
+      "TempHumidityResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "temperature": {
+                "type": "number"
+              },
+              "humidity": {
+                "type": "number"
+              }
+            }
+          }
+        }
+      },
+      "AllSensorDataResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "temperature": {
+                "type": "number"
+              },
+              "humidity": {
+                "type": "number"
+              },
+              "illumination": {
+                "type": "number"
+              },
+              "infrared": {
+                "type": "number"
+              }
+            }
+          }
+        }
+      },
+      "LEDControlResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          }
+        }
+      },
+      "LCDControlResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "EmoticonResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "emoticon": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": false
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
